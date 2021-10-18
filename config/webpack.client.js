@@ -3,7 +3,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
-
+    mode: ( 'development' === process.env.NODE_ENV ? 'development' : 'production' ),
     target: "node",
     entry: [
         //"webpack-hot-middleware/client",
@@ -87,4 +87,12 @@ module.exports = {
         }),
 
     ],
+    // development server configuration
+    devServer: {
+        port: 8088,
+        historyApiFallback: true,
+    },
+
+    // generate source map
+    devtool: 'source-map'
 };

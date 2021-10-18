@@ -3,6 +3,7 @@ const webpackNodeExternals = require("webpack-node-externals");
 const {CleanWebpackPlugin} = require("clean-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyWebpackPlugin = require( 'copy-webpack-plugin' );
+const WebpackMessages = require('webpack-messages');
 const webpack = require("webpack");
 const autoprefixer = require("autoprefixer");
 
@@ -37,15 +38,15 @@ module.exports = {
                     }
                 },
             },
-            // {
-            //     test: /\.(css)$/,
-            //     use: [{
-            //         loader: MiniCssExtractPlugin.loader,
-            //         options: {
-            //             publicPath: "/public/assets/css"
-            //         }
-            //     }, "css-loader"]
-            // },
+            {
+                test: /\.(css)$/,
+                use: [{
+                    loader: MiniCssExtractPlugin.loader,
+                    options: {
+                        publicPath: "/public/assets/css"
+                    }
+                }, "css-loader"]
+            },
             {
                 test: /\.scss$/,
                 use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader","style-loader"]
@@ -79,6 +80,10 @@ module.exports = {
 
     externals: [webpackNodeExternals()],
     plugins: [
+        new WebpackMessages({
+            name: theme,
+            logger: str => console.log(`>> ${str}`),
+        }),
         new MiniCssExtractPlugin({
             // filename: "public/asset/css/cliet-styles.css"
             filename: `public/asset/css/[name].[contenthash].css`,
@@ -98,4 +103,6 @@ module.exports = {
         historyApiFallback: true,
         contentBase: path.resolve(__dirname, "../public"),
     },
+    // generate source map
+    devtool: 'source-map'
 };
